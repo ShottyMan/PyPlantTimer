@@ -30,13 +30,17 @@ def CheckingTimeEvent(ScheduleTime):
 
     if Weekday == ScheduleTime.strftime('%A') and Time == ScheduleTime.strftime("%H:%M"):
         
-        print("Event occuring...")
+        print("[NOTICE] Event occured.")
+
+    return True
 
 
 def CreatingWeekdayEvent(Day, Hour, Minute):
     EventTime = Day + "-" + Hour + "-" + Minute
     
-    datetime.strptime(EventTime, "%A-%H-%M")
+    EventTimeObj = datetime.strptime(EventTime, "%A-%H-%M")
+
+    return EventTimeObj
     
 
 

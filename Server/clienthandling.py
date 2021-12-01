@@ -51,16 +51,18 @@ def handle_client(conn, addr):
 
             msg = conn.recv(msg_length).decode(serverinfo.FORMAT)
 
-            if msg == serverinfo.DISCONNECT:
+            if msg == serverinfo.DISCONNECT or msg == "!STOP":
 
                 connected = False
 
             print(f"[{addr}] {msg}")
 
-
+    if msg == "!STOP":
+        queue.enqueue(True)
     
     conn.close()
-    queue.enqueue(True)
+    
+    
 
 
 
