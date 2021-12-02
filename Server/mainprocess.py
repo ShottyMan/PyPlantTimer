@@ -14,11 +14,12 @@ START_THREAD = threading.active_count()
 SOCKET.bind(serverinfo.ADDR)
 
 
-
+#Weekdays
+WkDays = ("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")
 
 #Patterns
 mkeventcmd = re.compile(r'mkevent')
-mkeventflgs = re.compile(r'-(?:[mM]on|[tT]ues|[wW]ednes|[tT]hurs|[fF]ri|[sS]at|[sS]un)day')
+mkeventflgs = re.compile(r'(?:[mM]on|[tT]ues|[wW]ednes|[tT]hurs|[fF]ri|[sS]at|[sS]un)day')
 mkeventtime = re.compile(r'(?:0[\d]|1[\d]|2[0-4])-[0-5]\d')
 
 
@@ -53,6 +54,34 @@ def main():
                     print("Time is incorrectly inputed time format is H-M")
                 else:
                     d.Dlog("Differentiation Successful")
+                    d.Dlog(str(day))
+
+                    WeekdayFinal = []
+
+                    DayIndex = 0
+
+                    
+
+                    for items in day:
+
+                        WkDaysIndex = 0
+
+                        for days in WkDays:
+                            
+
+                            if days == items.upper():
+
+                                WeekdayFinal.append(DayIndex)
+
+                                break
+
+                            WkDaysIndex += 1
+
+                        DayIndex += 1
+
+                    print(WeekdayFinal[0])
+
+                        
 
                 print(day)
                 print(time)
