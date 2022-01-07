@@ -47,12 +47,19 @@ def main():
                 
                 time = mkeventtime.findall(inputcnsl)
                 if (bool(day) != True) and (bool(time) != True):
+                    
                     print("Invalid inputs, day and time are incorrectly inputed. Format is -Weekday H-M.")
+                    
                 elif bool(day) != True:
+                    
                     print("Invalid Weekday pick a valid weekday.")
+                    
                 elif bool(time) != True:
+                    
                     print("Time is incorrectly inputed time format is H-M")
+                    
                 else:
+                    
                     d.Dlog("Differentiation Successful")
                     d.Dlog(str(day))
 
