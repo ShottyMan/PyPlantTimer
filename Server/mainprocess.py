@@ -5,6 +5,7 @@ import serverinfo
 import clienthandling
 import scheduler
 import re
+import time as zeit
 from debug import d
 
 SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,6 +20,7 @@ WkDays = ("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "S
 
 #Patterns
 mkeventcmd = re.compile(r'mkevent')
+showeventscmd = re.compile(r'showevents')
 mkeventflgs = re.compile(r'(?:[mM]on|[tT]ues|[wW]ednes|[tT]hurs|[fF]ri|[sS]at|[sS]un)day')
 mkeventtime = re.compile(r'(?:0[\d]|1[\d]|2[0-4])-[0-5]\d')
 
@@ -35,7 +37,8 @@ def main():
     #    print(f"[ACTIVE CONNECTIONS] {CURRENT_THREAD}")
     #
     #    clienthandling.thread_handle_client(conn, addr)"
-            
+    
+    scheduler.CheckingDirAndMaking()
     while True:
         inputcnsl = input(">: ")
         if inputcnsl == "quit":
@@ -63,36 +66,31 @@ def main():
                     d.Dlog("Differentiation Successful")
                     d.Dlog(str(day))
 
-                    WeekdayFinal = []
-
-                    DayIndex = 0
-
+                    
                     
 
-                    for items in day:
-
-                        WkDaysIndex = 0
-
-                        for days in WkDays:
-                            
-
-                            if days == items.upper():
-
-                                WeekdayFinal.append(DayIndex)
-
-                                break
-
-                            WkDaysIndex += 1
-
-                        DayIndex += 1
-
-                    print(WeekdayFinal[0])
-
+                    
                         
 
                 print(day)
                 print(time)
-
+                
+                
+                for items in range(0,len(day)):
+                    
+                    scheduler.CreatingWeekdayEvent(day[items], time[items])
+                    #print(returnitem)
+            if showeventscmd.match(inputcnsl):
+                
+                scheduler.ShowEvents()
+               
+            file = scheduler.LoadEvent()
+            
+            for items in file:
+                scheduler.CheckingTimeEvent(items)
+            
+            print(file)
+        zeit.sleep(0.013)
                 
 
     
