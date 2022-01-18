@@ -7,12 +7,12 @@ from datetime import datetime
 # print("Starting..")
 def CheckingDirAndMaking():
     currentdir = os.getcwd()
-    if os.path.exists(currentdir + "/.pkl"):
+    if os.path.exists(currentdir + "/.json"):
         print("Directory Already Exists.")
     else:
-        NewPkl = os.path.join(currentdir, ".pkl")
+        Newjson = os.path.join(currentdir, ".json")
         try:
-            os.mkdir(NewPkl)
+            os.mkdir(Newjson)
         except OSError as error:
             print(error)
 
@@ -37,16 +37,16 @@ def CreatingWeekdayEvent(Day, HourMinute):
     FileTerm = 0
     while True:
         try:
-            print(currentdir + "/.pkl/" + "Event" + str(FileTerm) + ".pkl")
+            print(currentdir + "/.json/" + "Event" + str(FileTerm) + ".json")
             if (
-                os.path.exists(currentdir + "/.pkl/" + "Event" + str(FileTerm) + ".pkl")
+                os.path.exists(currentdir + "/.json/" + "Event" + str(FileTerm) + ".json")
                 == False
             ):
                 print("File does not exist.")
                 pickle.dump(
                     EventTimeObj,
                     open(
-                        currentdir + "/.pkl/" + "Event" + str(FileTerm) + ".pkl", "wb"
+                        currentdir + "/.json/" + "Event" + str(FileTerm) + ".json", "wb"
                     ),
                 )
                 break
@@ -57,20 +57,9 @@ def CreatingWeekdayEvent(Day, HourMinute):
 
 
 def LoadEvent():
-    currentdir = os.getcwd() + "/.pkl/"
+    currentdir = os.getcwd() + "/.json/"
     files = 0
-    filedir = "Event" + str(files) + ".pkl"
-    FileCount = 0
-    while True:
-        try:
-            print(currentdir + "Event" + str(FileCount) + ".pkl")
-            if os.path.exists(currentdir + "Event" + str(FileCount) + ".pkl") == True:
-                FileCount += 1
-            else:
-                break
-        except OSError as error:
-            print(error)
-            break
+    filedir = "Event" + str(files) + ".json"
     file = []
     while True:
         if os.path.exists(currentdir + filedir):
@@ -79,13 +68,13 @@ def LoadEvent():
         elif os.path.exists(currentdir + filedir) == False:
             break
         files = 1 + files
-        filedir = "Event" + str(files - 1) + ".pkl"
+        filedir = "Event" + str(files - 1) + ".json"
     return file
 
 
 def ShowEvents():
     currentdir = os.getcwd()
-    currentdir = currentdir + "/.pkl/"
+    currentdir = currentdir + "/.json/"
     Files = os.scandir(currentdir)
     for items in Files:
         if items.is_file:
