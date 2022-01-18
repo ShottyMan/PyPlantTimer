@@ -5,25 +5,18 @@ import serverinfo
 import clienthandling
 import scheduler
 import re
-import time as zeit
+import time
 from debug import d
 
 SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 START_THREAD = threading.active_count()
-
 SOCKET.bind(serverinfo.ADDR)
-
-
-#Weekdays
-WkDays = ("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")
-
+WEEKDAYS = ("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")
 #Patterns
 mkeventcmd = re.compile(r'mkevent')
 showeventscmd = re.compile(r'showevents')
 mkeventflgs = re.compile(r'(?:[mM]on|[tT]ues|[wW]ednes|[tT]hurs|[fF]ri|[sS]at|[sS]un)day')
 mkeventtime = re.compile(r'(?:0[\d]|1[\d]|2[0-4])-[0-5]\d')
-
 
 def main():
     #SOCKET.listen()
@@ -45,53 +38,27 @@ def main():
             break
         else:
             if mkeventcmd.match(inputcnsl):
-
                 day = mkeventflgs.findall(inputcnsl)
-                
                 time = mkeventtime.findall(inputcnsl)
                 if (bool(day) != True) and (bool(time) != True):
-                    
                     print("Invalid inputs, day and time are incorrectly inputed. Format is -Weekday H-M.")
-                    
                 elif bool(day) != True:
-                    
                     print("Invalid Weekday pick a valid weekday.")
-                    
                 elif bool(time) != True:
-                    
                     print("Time is incorrectly inputed time format is H-M")
-                    
                 else:
-                    
                     d.Dlog("Differentiation Successful")
-                    d.Dlog(str(day))
-
-                    
-                    
-
-                    
-                        
-
+                    d.Dlog(str(day))                   
                 print(day)
                 print(time)
-                
-                
                 for items in range(0,len(day)):
-                    
                     scheduler.CreatingWeekdayEvent(day[items], time[items])
                     #print(returnitem)
             if showeventscmd.match(inputcnsl):
-                
                 scheduler.ShowEvents()
-               
             file = scheduler.LoadEvent()
-            
             for items in file:
-                scheduler.CheckingTimeEvent(items)
-            
+                scheduler.CheckingTimeEvent(items) 
             print(file)
-        zeit.sleep(0.013)
-                
-
-    
+        time.sleep(0.013)
     print("Program closing")
