@@ -1,4 +1,9 @@
-import socket, threading, asyncio, serverinfo, time
+import asyncio
+import socket
+import threading
+import time
+
+import serverinfo
 
 
 class Queue(object):
@@ -25,7 +30,7 @@ class Queue(object):
         return None if self.size() == 0 else self.item.pop()
 
 
-queue = Queue()  # init the class we made
+queue = Queue()  # init the class
 
 
 def handle_client(conn, addr):
