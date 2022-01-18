@@ -1,8 +1,5 @@
-import socket
-import threading
-import asyncio
-import serverinfo
-import time
+import socket, threading, asyncio, serverinfo, time
+
 
 class Queue(object):
     def __init__(self):
@@ -22,56 +19,34 @@ class Queue(object):
         return len(self.item)
 
     def isempty(self):
-        if self.size() == 0:
-            return True
-        else: 
-            return False
+        return self.size() == 0
+
     def dequeue(self):
-        if self.size() == 0:
-            return None
-        else:
-            return self.item.pop()
+        return None if self.size() == 0 else self.item.pop()
 
 
-queue = Queue()
+queue = Queue()  # init the class we made
+
 
 def handle_client(conn, addr):
-
     print(f"[NEW CONNECTION] {addr} connected.")
-
     connected = True
-
     while connected:
-
         msg_length = conn.recv(serverinfo.HEADER).decode(serverinfo.FORMAT)
-
         if msg_length:
-
             msg_length = int(msg_length)
-
             msg = conn.recv(msg_length).decode(serverinfo.FORMAT)
-
-            if msg == serverinfo.DISCONNECT or msg == "!STOP":
-
+            if msg in [serverinfo.DISCONNECT, "!STOP"]:
                 connected = False
-
             print(f"[{addr}] {msg}")
-
     if msg == "!STOP":
         queue.enqueue(True)
-    
     conn.close()
-    
-    
-
-
-
 
 
 def thread_handle_client(conn, addr):
-    
     print("[Thread]: New thread has been created..")
-    thread = threading.Thread(target=handle_client,args=(conn, addr))
+    thread = threading.Thread(target=handle_client, args=(conn, addr))
     thread.start()
     thread.join()
     return queue.dequeue()
