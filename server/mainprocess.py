@@ -45,7 +45,7 @@ def main():
     scheduler.CheckingDirAndMaking()
     while True:
         inputcnsl = input(">: ")
-        if "quit":
+        if inputcnsl =="quit":
             break
         else:
             match inputcnsl.split()[0]:
