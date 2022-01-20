@@ -1,92 +1,51 @@
-import os
-import pickle
-import time
-from datetime import datetime
+import json
+import datetime
 
 
-# print("Starting..")
-def CheckingDirAndMaking():
-    currentdir = os.getcwd()
-    if os.path.exists(currentdir + "/.pkl"):
-        print("Directory Already Exists.")
-    else:
-        NewPkl = os.path.join(currentdir, ".pkl")
+class Scheduler:
+    def __init__(self):
+        """Inits the class by creating or reading from a json file."""
+        self.current_time = datetime.datetime.now()
+        self.name = 1
+        self.event_dict = {}
+
+    def check_time(self, event_time: tuple):
+        """compares the current time and the trigger date of the event
+
+        Args:
+            event_time (tuple): (weekday (0-6) hour (0-24), minute(0-60))
+
+        Returns:
+            Bool: True if match, false if don't match.
+        """
+        return (
+            self.current_time.weekday,
+            self.current_time.hour,
+            self.current_time.minute,
+        ) == event_time
+
+    def update_time(self):
+        """Update the class's current time."""
+        self.current_time = datetime.datetime.now()
+
+    def new_event(self, day: int, hour: int, minute: int):
+        """Add a new event to the event dictionary.
+
+        Args:
+            day (int): Day, 0-6, Monday through Friday
+            hour (int): Hour, 0-24
+            minute (int): Minute, 0-59
+        """
+        self.event_dict.update({self.name: (day, hour, minute)})
+        self.name += 1
+
+    def load_json(self, json):
         try:
-            os.mkdir(NewPkl)
-        except OSError as error:
-            print(error)
-
-
-def CheckingTimeEvent(ScheduleTime):
-    CurrentTime = datetime.now()
-    Weekday = CurrentTime.strftime("%A")
-    Time = CurrentTime.strftime("%H:%M")
-    temp = ScheduleTime.strftime("%A")
-    temp2 = ScheduleTime.strftime("%H:%M")
-    print("[Notice] Detecting Events")
-    if Weekday != ScheduleTime.strftime("%A") or Time != ScheduleTime.strftime("%H:%M"):
-        return False
-    print("[NOTICE] Event occured.")
-    return True
-
-
-def CreatingWeekdayEvent(Day, HourMinute):
-    currentdir = os.getcwd()
-    EventTime = str(Day).title() + "-" + HourMinute
-    EventTimeObj = datetime.strptime(EventTime, "%A-%H-%M")
-    FileTerm = 0
-    while True:
-        try:
-            print(currentdir + "/.pkl/" + "Event" + str(FileTerm) + ".pkl")
-            if (
-                os.path.exists(currentdir + "/.pkl/" + "Event" + str(FileTerm) + ".pkl")
-                == False
-            ):
-                print("File does not exist.")
-                pickle.dump(
-                    EventTimeObj,
-                    open(
-                        currentdir + "/.pkl/" + "Event" + str(FileTerm) + ".pkl", "wb"
-                    ),
-                )
-                break
-            FileTerm += 1
-        except OSError as error:
-            print(error)
-            break
-
-
-def LoadEvent():
-    currentdir = os.getcwd() + "/.pkl/"
-    files = 0
-    filedir = "Event" + str(files) + ".pkl"
-    FileCount = 0
-    while True:
-        try:
-            print(currentdir + "Event" + str(FileCount) + ".pkl")
-            if os.path.exists(currentdir + "Event" + str(FileCount) + ".pkl") == True:
-                FileCount += 1
-            else:
-                break
-        except OSError as error:
-            print(error)
-            break
-    file = []
-    while True:
-        if os.path.exists(currentdir + filedir):
-            fileopen = open(currentdir + filedir, "rb")
-            file.append(pickle.load(fileopen))
-        elif os.path.exists(currentdir + filedir) == False:
-            break
-        files = 1 + files
-        filedir = "Event" + str(files - 1) + ".pkl"
-    return file
-
-
-def ShowEvents():
-    currentdir = os.getcwd()
-    currentdir = currentdir + "/.pkl/"
-    Files = os.scandir(currentdir)
-    for items in Files:
-        if items.is_file:
-            print(items.name)
+            self.event_dict = json.load(open("events.json", "w", encoding="utf-8"))
+        except OSError:
+            print(
+                "Weird. An OS error occured. This really shouldn't happen. Sorry, but we're shutting down."
+            )
+            raise OSError from OSError
+        except json.JSONDecodeError:  # if the file is empty, initialize the event dict
+            self.event_dict = {}
