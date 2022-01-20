@@ -39,13 +39,21 @@ class Scheduler:
         self.event_dict.update({self.name: (day, hour, minute)})
         self.name += 1
 
-    def load_json(self, json):
+    def load_json(self, json_file):
+        """Fill the local dictionary with the contents of a json file.
+
+        Args:
+            json_file (json): The json file that will be loaded.
+
+        Raises:
+            OSError: If there is an error loading the file
+        """
         try:
-            self.event_dict = json.load(open("events.json", "w", encoding="utf-8"))
-        except OSError:
+            self.event_dict = json.load(json_file)
+        except json.JSONDecodeError:
             print(
-                "Weird. An OS error occured. This really shouldn't happen. Sorry, but we're shutting down."
+                "The json couldn't be loaded. This is fatal."
             )
-            raise OSError from OSError
-        except json.JSONDecodeError:  # if the file is empty, initialize the event dict
-            self.event_dict = {}
+            raise ValueError from ValueError
+            
+

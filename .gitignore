@@ -192,3 +192,8 @@ Temporary Items
 # Built Visual Studio Code Extensions
 *.vsix
 
+<<<<<<< HEAD
+=======
+#Jsons
+.json
+>>>>>>> eb18fbbb2ef01f6a01de9166fb6b8daf9cd9656c
