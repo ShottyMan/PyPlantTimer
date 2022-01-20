@@ -53,4 +53,4 @@ def thread_handle_client(conn, addr):
     thread = threading.Thread(target=handle_client, args=(conn, addr))
     thread.start()
     thread.join()
-    return queue.dequeue()
+    queue.dequeue()

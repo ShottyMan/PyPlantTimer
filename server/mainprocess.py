@@ -38,8 +38,9 @@ def make_event(user_input, sch_obj: scheduler.Scheduler):
     sch_obj.new_event(day, time_tuple[0], time_tuple[1])
     return 0
 
+local_control_queue = clienthandling.Queue()
 
-def main():
+def local_control():
     s = scheduler.Scheduler()
     while True:
         user_input = input(">: ")
@@ -50,3 +51,12 @@ def main():
         elif user_input == "showevents":
             print(s.event_dict)  # TODO: make this prettier
     # TODO: make debug work again
+
+def main():
+    
+    while True:
+        thread = threading.Thread(target=local_control)
+        thread.start()
+        if local_control_queue:
+            print("[NOTICE]: Quitting Program...")
+            break
