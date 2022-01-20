@@ -4,7 +4,7 @@ import datetime
 
 class Scheduler:
     def __init__(self):
-        """Inits the class by creating or reading from a json file."""
+        """Inits the class."""
         self.current_time = datetime.datetime.now()
         self.name = 1
         self.event_dict = {}
@@ -51,9 +51,5 @@ class Scheduler:
         try:
             self.event_dict = json.load(json_file)
         except json.JSONDecodeError:
-            print(
-                "The json couldn't be loaded. This is fatal."
-            )
+            print("The json couldn't be loaded. This is fatal.")
             raise ValueError from ValueError
-            
-
