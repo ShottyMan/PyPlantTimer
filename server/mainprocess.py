@@ -6,7 +6,8 @@ import clienthandling
 import scheduler
 import re
 import time
-from debug import d
+
+# from debug import d
 
 SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 START_THREAD = threading.active_count()
@@ -20,59 +21,32 @@ WEEKDAYS = (
     "SATURDAY",
     "SUNDAY",
 )
-# Patterns
-mkeventcmd = re.compile(r"mkevent")
-showeventscmd = re.compile(r"showevents")
-mkeventflgs = re.compile(
-    r"(?:[mM]on|[tT]ues|[wW]ednes|[tT]hurs|[fF]ri|[sS]at|[sS]un)day"
-)
-mkeventtime = re.compile(r"(?:0[\d]|1[\d]|2[0-4])-[0-5]\d")
+
+
+def make_event(user_input, sch_obj: scheduler.Scheduler):
+    user_input = user_input.split()
+    try:
+        day = WEEKDAYS.index(user_input[1])
+    except:
+        print("Invalid day.")
+        return -1
+    try:
+        time_tuple = tuple(int(x) for x in user_input[1].split(":"))
+    except:
+        print("Invalid time.")
+        return -2
+    sch_obj.new_event(day, time_tuple[0], time_tuple[1])
+    return 0
 
 
 def main():
-    # SOCKET.listen()
-    # print("[SERVER]: Server is starting...")
-
-    # while True:
-    #    conn, addr = SOCKET.accept()
-    #
-    #    CURRENT_THREAD = threading.activeCount() - START_THREAD
-    #
-    #    print(f"[ACTIVE CONNECTIONS] {CURRENT_THREAD}")
-    #
-    #    clienthandling.thread_handle_client(conn, addr)"
-
-    scheduler.CheckingDirAndMaking()
+    s = scheduler.Scheduler()
     while True:
-        inputcnsl = input(">: ")
-        if inputcnsl =="quit":
+        user_input = input(">: ")
+        if user_input == "quit":
             break
-        else:
-            match inputcnsl.split()[0]:
-                case "mkevent":
-                    day = mkeventflgs.findall(inputcnsl)
-                    trigger_time = mkeventtime.findall(inputcnsl)
-                    if (bool(day) != True) and (bool(trigger_time) != True):
-                        print(
-                            "Invalid inputs, day and time are incorrectly inputed. Format is -Weekday H-M."
-                        )
-                    elif bool(day) != True:
-                        print("Invalid Weekday pick a valid weekday.")
-                    elif bool(trigger_time) != True:
-                        print("Time is incorrectly inputed time format is H-M")
-                    else:
-                        d.Dlog("Differentiation Successful")
-                        d.Dlog(str(day))
-                    print(day)
-                    print(trigger_time)
-                    for items in range(0, len(day)):
-                        scheduler.CreatingWeekdayEvent(day[items], trigger_time[items])
-                        # print(returnitem)
-                case "showevents":
-                    scheduler.ShowEvents()
-            file = scheduler.LoadEvent()
-            for items in file:
-                scheduler.CheckingTimeEvent(items)
-            print(file)
-        time.sleep(0.013)
-    print("Program closing")
+        if user_input == "mkevent": # FIXME: this... doesn't work
+            print(make_event(user_input, s))
+        elif user_input == "showevents":
+            print(s.event_dict)  # TODO: make this prettier
+    # TODO: make debug work again
