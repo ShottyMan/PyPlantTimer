@@ -67,6 +67,7 @@ def main():
     thread = threading.Thread(target=local_control)
     thread.start()
     
+    time.sleep(2)
     while True:
         #Reminder if you want to pass arguements you can do args=*Place arguements here*
         time.sleep(2)
