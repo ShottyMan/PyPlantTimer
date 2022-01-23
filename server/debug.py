@@ -29,15 +29,12 @@ class Debug:
         self.terminal_rows = self.terminal_rows - 1
         #This one is the Escape code and tells it to move one line up and to the end of the last printed message
         #Made it this way becasue trouble shooting it was a massive pain in the behing
-        self.ESCAPE_CODE = "\x1b[" + str(self.terminal_rows) + ";" + str(self.first_line_count) + "H"#+ "\x1b[2K"
-        #self.ESCAPE_CODE = "\x1b[11;0H\x1b[2K"
-        self.FLUSH_CODE = f"""\x1b[12;0H\n"""
+        self.ESCAPE_CODE = "\r\x1b[" + str(self.terminal_rows) + ";" + str(self.first_line_count) + "H"#+ "\x1b[2K
     def dlog_debug(self, Message):
         #print(str(self.terminal_collumns) + " " + str(self.terminal_rows))
         terminal_manager.terminal_save()
         disable.start()
-        print(self.FLUSH_CODE, end="")
-        print(self.ESCAPE_CODE + self.PREFIX + Message, end="\n") 
+        print(self.ESCAPE_CODE + self.PREFIX + Message, end="\t") 
         self.first_line_count = len(self.PREFIX + Message)
         #print("\x1b[{}")
         terminal_manager.terminal_load()
