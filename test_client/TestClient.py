@@ -10,8 +10,10 @@ ADDR = (SERVER, PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect(ADDR)
-
+try:
+    client.connect(ADDR)
+except socket.error as e:
+    print(f"""[\x1b[38;5;{124}mError\x1b[0m]: No Connection Detected, Socket Error: \x1b[38;5;{124}m {e}\x1b[0m""")
 
 def send(msg):
     message = msg.encode(FORMAT)

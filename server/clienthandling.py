@@ -33,7 +33,10 @@ queue = Queue()  # init the class
 
 
 def handle_client(conn, addr):
-    print(f"[NEW CONNECTION] {addr} connected.")
+
+    # NOTICE: I have no idea how any of this works
+
+    print(f"{addr} connected.")
     connected = True
     while connected:
         msg_length = conn.recv(serverinfo.HEADER).decode(serverinfo.FORMAT)
@@ -53,4 +56,3 @@ def thread_handle_client(conn, addr):
     thread = threading.Thread(target=handle_client, args=(conn, addr))
     thread.start()
     thread.join()
-    return queue.dequeue()
