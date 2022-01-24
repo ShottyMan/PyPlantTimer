@@ -15,6 +15,9 @@ class keyboardSaveNLoad:
 disable = keyboardDisable()
 terminal_manager = keyboardSaveNLoad()
 
+#FIXME: Create an array to store all of the messages that are in the terminal based on the size of the terminal
+#This is making me want to kermit not alive
+
 class Debug:
     def __init__(self):
         #This is so that all of the variables are set up for the use of the functions
