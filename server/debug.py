@@ -1,19 +1,19 @@
 import time, os
-class keyboardDisable():
+class disable_keyboard():
     def start(self):
         print("\x1b[?25l", end="")
     def stop(self):
         print("\x1b[?25h", end="")
 
 #Quite important it saves and loads the position of the cursor using the escape characters.
-class keyboardSaveNLoad:
+class keyboard_save_n_load:
     def terminal_save(self):
         print("\x1b[s", end="")
     def terminal_load(self):
         print("\x1b[u", end="")
 
-disable = keyboardDisable()
-terminal_manager = keyboardSaveNLoad()
+disable = disable_keyboard()
+terminal_manager = keyboard_save_n_load()
 
 #This is fixed however this comment was actually exagerated and took less time than I thought to implement it.
 #I want to keep it because it is hilarious
@@ -42,7 +42,7 @@ class Display:
         This basically prints what is stored in the display buffer, 
         It removes the items that are at the end of the buffer then
         it prints all of them out. The one at the end of the list is
-        always the newest message and the one at the beggining is always
+        always the newest message and the one at the beginning is always
         the oldest message on the display.
         """
         terminal_manager.terminal_save()
