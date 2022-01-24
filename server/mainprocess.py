@@ -68,11 +68,14 @@ def main():
     thread.start()
     
     time.sleep(2)
+
+    seconds = 2
     while True:
         #Reminder if you want to pass arguements you can do args=*Place arguements here*
         time.sleep(2)
-        d.dlog_debug("Testing")
+        d.dlog_debug("Testing" + str(os.get_terminal_size()) + f" seconds: {seconds}")
         if local_control_queue.dequeue():
             d.dlog_notice("Program closing...")
             break
+        seconds += 2
     thread.join()

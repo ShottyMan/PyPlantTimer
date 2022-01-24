@@ -1,9 +1,9 @@
 import time, os
 class keyboardDisable():
     def start(self):
-        self.on = True
+        print("\x1b[?25l", end="")
     def stop(self):
-        self.on = False
+        print("\x1b[?25h", end="")
 
         
 class keyboardSaveNLoad:
@@ -18,7 +18,7 @@ terminal_manager = keyboardSaveNLoad()
 #FIXME: Create an array to store all of the messages that are in the terminal based on the size of the terminal
 #This is making me want to kermit not alive
 
-class Debug:
+class Display:
     def __init__(self):
         #This is so that all of the variables are set up for the use of the functions
         self.first_line_count = 0
@@ -30,20 +30,31 @@ class Debug:
         self.terminal_indicator = "\n>: "
         self.terminal_collumns, self.terminal_rows = os.get_terminal_size()
         self.terminal_rows = self.terminal_rows - 1
+        self.display_buffer = []
         #This one is the Escape code and tells it to move one line up and to the end of the last printed message
         #Made it this way becasue trouble shooting it was a massive pain in the behing
-        self.ESCAPE_CODE = "\r\x1b[" + str(self.terminal_rows) + ";" + str(self.first_line_count) + "H"#+ "\x1b[2K
-    def dlog_debug(self, Message):
-        #print(str(self.terminal_collumns) + " " + str(self.terminal_rows))
+        self.ESCAPE_CODE = "\x1b[" + str(self.terminal_rows) + ";" + str(self.first_line_count) + "H"+ "\x1b[2K"    
+    def move_to_position(self, row, columns):
+        print("\x1b[" + str(row) + ";" + str(columns) + "H", end="")
+    def display_refresh(self):
         terminal_manager.terminal_save()
-        disable.start()
-        print(self.ESCAPE_CODE + self.PREFIX + Message, end="\t") 
-        self.first_line_count = len(self.PREFIX + Message)
-        #print("\x1b[{}")
+        if len(self.display_buffer) >= self.terminal_rows:
+            self.move_to_position(0,0)
+            print(self.display_buffer.pop(0))
+            for lines in self.display_buffer:
+                print(lines)
+        else:
+            self.move_to_position(self.terminal_rows-len(self.display_buffer), 0)
+            current_index = 0
+            for lines in self.display_buffer:
+                if current_index != len(self.display_buffer):
+                    print(lines)
+                else:
+                    print(lines,end="")
         terminal_manager.terminal_load()
-        disable.stop()
-
-        #print(self.terminal_indicator, end="")
+    def dlog_debug(self, Message):
+        self.display_buffer.append(self.PREFIX + Message)
+        self.display_refresh()
     def dlog_debugnewconn(self, Message):
         disable.start()
         terminal_manager.terminal_save()
@@ -74,7 +85,8 @@ class Debug:
         disable.stop()
 
 
-d = Debug()
+
+d = Display()
 
 #possible solution for unexpected error
 """class Thread_Debug(Debug):
