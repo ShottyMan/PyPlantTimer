@@ -1,4 +1,4 @@
-import time, os
+import os
 
 
 class disable_keyboard:

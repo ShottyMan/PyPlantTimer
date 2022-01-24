@@ -39,14 +39,17 @@ def make_event(user_input, sch_obj: scheduler.Scheduler):
     sch_obj.new_event(day, time_tuple[0], time_tuple[1])
     return 0
 
-#Create a queue for the Local control thread for allowing talking within and outside the thread.
+
+# Create a queue for the Local control thread for allowing talking within and outside the thread.
 local_control_queue = clienthandling.Queue()
+
 
 def start_terminal():
     columns, lines = os.get_terminal_size()
     print(f"""\x1b[2J\x1b[{lines};0H""")
 
-#This is the function we pass to the thread function to start a new thread.
+
+# This is the function we pass to the thread function to start a new thread.
 def local_control():
     s = scheduler.Scheduler()
     start_terminal()
@@ -55,23 +58,24 @@ def local_control():
         user_input = input(">: ")
         if user_input == "quit":
             break
-        if user_input == "mkevent": # FIXME: this... doesn't work
+        if user_input == "mkevent":  # FIXME: this... doesn't work
             d.dlog_notice(make_event(user_input, s))
         elif user_input == "showevents":
             d.dlog_notice(s.event_dict)  # TODO: make this prettier
     # TODO: make debug work again
     local_control_queue.enqueue(True)
 
+
 def main():
-    #Started thread to allow input while outputting
+    # Started thread to allow input while outputting
     thread = threading.Thread(target=local_control)
     thread.start()
-    
+
     time.sleep(2)
 
     seconds = 2
     while True:
-        #Reminder if you want to pass arguements you can do args=*Place arguements here*
+        # Reminder if you want to pass arguements you can do args=*Place arguements here*
         time.sleep(2)
         d.dlog_debug("Testing" + str(os.get_terminal_size()) + f" seconds: {seconds}")
         if local_control_queue.dequeue():
