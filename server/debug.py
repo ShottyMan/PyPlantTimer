@@ -56,33 +56,17 @@ class Display:
         self.display_buffer.append(self.PREFIX + Message)
         self.display_refresh()
     def dlog_debugnewconn(self, Message):
-        disable.start()
-        terminal_manager.terminal_save()
-        print(self.ESCAPE_CODE + self.NEWCONN_PREFIX + Message)
-        self.first_line_count = len(self.NEWCONN_PREFIX + Message)
-        terminal_manager.terminal_load()
-        disable.stop()
+        self.display_buffer.append(self.NEWCONN_PREFIX + Message)
+        self.display_refresh()
     def dlog_notice(self, Message):
-        disable.start()
-        terminal_manager.terminal_save()
-        print(self.ESCAPE_CODE + self.NOTICE_PREFIX + Message)
-        self.first_line_count = len(self.NOTICE_PREFIX + Message)
-        terminal_manager.terminal_load()
-        disable.stop()
+        self.display_buffer.append(self.NOTICE_PREFIX + Message)
+        self.display_refresh()
     def dlog_error(self, Message):
-        disable.start()
-        terminal_manager.terminal_save()
-        print(self.ESCAPE_CODE + self.ERROR_PREFIX + Message)
-        self.first_line_count = len(self.ERROR_PREFIX + Message)
-        terminal_manager.terminal_load()
-        disable.stop()
+        self.display_buffer.append(self.ERROR_PREFIX + Message)
+        self.display_refresh()
     def dlog_warning(self, Message):
-        disable.start()
-        terminal_manager.terminal_save()
-        print(self.ESCAPE_CODE + self.WARNING_PREFIX + Message)
-        self.first_line_count = len(self.WARNING_PREFIX + Message)
-        terminal_manager.terminal_load()
-        disable.stop()
+        self.display_buffer.append(self.WARNING_PREFIX + Message)
+        self.display_refresh()
 
 
 
